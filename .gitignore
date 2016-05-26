@@ -36,3 +36,6 @@ build
 # kdevelop
 .kdev4
 object_tracking.kdev4
+
+*.swp
+__pycache__

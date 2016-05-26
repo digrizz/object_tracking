@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "logger.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -8,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     initialize();
     ui->setupUi(this);
+    Logger::getInstance()->warning("test");
 }
 
 MainWindow::~MainWindow()
