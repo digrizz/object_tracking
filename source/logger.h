@@ -1,20 +1,28 @@
 #include <string>
 
-class Logger
+namespace ot
 {
-    public:
-        virtual ~Logger();
+    class Logger
+    {
+        public:
+            virtual ~Logger();
 
-        void error(std::string message);
-        void warning(std::string message);
-        void debug(std::string message);
-        void debug(std::string message, int level);
+            void error(std::string message);
+            void warning(std::string message);
+            void into(std::string message);
+            void debug(std::string message);
+            void debug(std::string message, int level);
 
-        static Logger *getInstance();
+            void timeInfo(std::string message, time_t duration);
+            void timeDebug(std::string message, time_t duration);
+            void timeDebug(std::string message, time_t duration, int level);
 
-    private:
-        static Logger *instance;
-        Logger();
+            static Logger *getInstance();
 
-};
+        private:
+            static Logger *instance;
+            Logger();
+
+    };
+}
 

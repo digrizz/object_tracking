@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "logger.h"
 
+#include "tracker.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,7 +10,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     initialize();
     ui->setupUi(this);
-    Logger::getInstance()->warning("test");
+    ot::Logger::getInstance()->warning("test");
+
+    ot::Tracker t;          // it's here for test only
 }
 
 MainWindow::~MainWindow()

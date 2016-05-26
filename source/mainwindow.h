@@ -13,33 +13,33 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 namespace Ui {
-class MainWindow;
+    class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    public:
+        explicit MainWindow(QWidget *parent = 0);
+        ~MainWindow();
 
-private:
-    void initialize();
+    private:
+        void initialize();
 
-public slots:
-    void updateGUI();
+        public slots:
+            void updateGUI();
 
 
-private slots:
-    void on_btnPause_clicked();
+        private slots:
+            void on_btnPause_clicked();
 
-private:
-    Ui::MainWindow *ui;
-    cv::VideoCapture *_capture;
-    cv::Mat _frameOrginal;
-    QImage _imgOrgianl;
-    QTimer *_timer;
+    private:
+        Ui::MainWindow *ui;
+        cv::VideoCapture *_capture;
+        cv::Mat _frameOrginal;
+        QImage _imgOrgianl;
+        QTimer *_timer;
 
 };
 
