@@ -1,4 +1,4 @@
-#include "cv.h"
+#include <opencv2/core/core.hpp>
 
 struct detector_info_t
 {
