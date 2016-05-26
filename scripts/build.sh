@@ -5,6 +5,7 @@ usage() {
     echo "This script builds project"
     echo ""
     echo "Parameters:"
+    echo " -r, --rebuild        Rebuild whole project"
     echo " -h, --help           Print this help"
     echo ""
 }

@@ -2,7 +2,7 @@
 usage() {
     echo "Usage: run.sh [commands]"
     echo ""
-    echo "This script runs project if it has been build"
+    echo "This script runs project if it has been already build"
     echo ""
     echo "Parameters:"
     echo " -h, --help           Print this help"
