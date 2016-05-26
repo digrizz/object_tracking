@@ -39,3 +39,4 @@ object_tracking.kdev4
 
 *.swp
 __pycache__
+CMakeLists.txt.user
