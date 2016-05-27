@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-//    if(_capture.isOpened())
+//    if(_capture->isOpened())
 //        _capture->release();
 
     _timer->deleteLater();
