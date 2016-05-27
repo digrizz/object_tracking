@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QPixmap>
+#include <QFileDialog>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -26,20 +27,24 @@ public:
 
 private:
     void initialize();
+    void setVideoCapture();
 
 public slots:
     void updateGUI();
-
+    QString openFile();
 
 private slots:
     void on_btnPause_clicked();
 
+    void on_btnOpenFile_clicked();
+
 private:
     Ui::MainWindow *ui;
-    cv::VideoCapture *_capture;
+    cv::VideoCapture _capture;
     cv::Mat _frameOrginal;
     QImage _imgOrgianl;
     QTimer *_timer;
+    QString _videoPath;
 
 };
 

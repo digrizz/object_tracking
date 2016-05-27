@@ -14,23 +14,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    if(_capture->isOpened())
-        _capture->release();
+//    if(_capture.isOpened())
+//        _capture->release();
 
     _timer->deleteLater();
-    delete _capture;
+//    delete _capture;
     delete ui;
 }
 
 void MainWindow::initialize()
 {
-    _capture = new cv::VideoCapture(0);
-
-    if(_capture->isOpened() == false)
-    {
-        qDebug() << "error: capture not accessed successfuly";
-        return;
-    }
+    _videoPath = QString();
 
     _timer = new QTimer(this);
 
@@ -40,14 +34,33 @@ void MainWindow::initialize()
     _timer->start(20);
 }
 
+QString MainWindow::openFile()
+{
+    auto fileName = QFileDialog::getOpenFileName(this,tr("Open Video File"), "'C:\'", tr("Video Files (*.mp4 *.mkv)"));
+    return fileName;
+}
+
+void MainWindow::setVideoCapture()
+{
+    QFileInfo video(_videoPath);
+    if(video.exists())
+    {
+        const std::string path = _videoPath.toUtf8().constData();
+        _capture = cv::VideoCapture(path);
+
+        if(!_capture.isOpened())
+            qDebug() << "error: capture not accessed successfuly";
+    }
+}
+
 void MainWindow::updateGUI()
 {
-    (*_capture) >> _frameOrginal;
+    (_capture) >> _frameOrginal;
 
     if(_frameOrginal.empty())
         return;
 
-    _capture->read(_frameOrginal);
+    _capture.read(_frameOrginal);
 
     cv::cvtColor(_frameOrginal, _frameOrginal, CV_BGR2RGB);
 
@@ -69,4 +82,10 @@ void MainWindow::on_btnPause_clicked()
         _timer->start(20);
         ui->btnPause->setText("Pause");
     }
+}
+
+void MainWindow::on_btnOpenFile_clicked()
+{
+    _videoPath = openFile();
+    setVideoCapture();
 }
