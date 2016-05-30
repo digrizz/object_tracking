@@ -8,6 +8,9 @@
 #include <QTimer>
 #include <QPixmap>
 #include <QFileDialog>
+#include <QList>
+#include <QCheckBox>
+#include <QColorDialog>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -28,13 +31,20 @@ class MainWindow : public QMainWindow
 private:
     void initialize();
     void setVideoCapture();
+    void buttonGroup();
+    void cbxConnections();
+    void setEnabledButtons();
+    void openColorPalette();
+
 
 public slots:
     void updateGUI();
     QString openFile();
+    void verifyButtonIsClicked(int id);
+    void verifyCbxIsChecked();
 
-        private slots:
-            void on_btnPause_clicked();
+private slots:
+    void on_btnPause_clicked();
     void on_btnOpenFile_clicked();
 
 private:
