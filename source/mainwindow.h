@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "tracker.h"
+
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QImage>
@@ -50,10 +52,12 @@ private slots:
 private:
     Ui::MainWindow *ui;
     cv::VideoCapture _capture;
-    cv::Mat _frameOrginal;
+    cv::Mat _frameOriginal;
     QImage _imgOrgianl;
     QTimer *_timer;
     QString _videoPath;
+
+    ot::Tracker tracker;
 
 };
 

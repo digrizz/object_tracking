@@ -231,16 +231,18 @@ void MainWindow::verifyCbxIsChecked()
 
 void MainWindow::updateGUI()
 {
-    (_capture) >> _frameOrginal;
+    (_capture) >> _frameOriginal;
 
-    if(_frameOrginal.empty())
+    if(_frameOriginal.empty())
         return;
 
-    _capture.read(_frameOrginal);
+    _capture.read(_frameOriginal);
 
-    cv::cvtColor(_frameOrginal, _frameOrginal, CV_BGR2RGB);
+    ot::tracker_info_t info = tracker.trackObject(_frameOriginal);
 
-    QImage output((const unsigned char*) _frameOrginal.data, _frameOrginal.cols, _frameOrginal.rows, _frameOrginal.step, QImage::Format_RGB888);
+    cv::cvtColor(_frameOriginal, _frameOriginal, CV_BGR2RGB);
+
+    QImage output((const unsigned char*) _frameOriginal.data, _frameOriginal.cols, _frameOriginal.rows, _frameOriginal.step, QImage::Format_RGB888);
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
 
