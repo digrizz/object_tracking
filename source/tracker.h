@@ -26,6 +26,8 @@ namespace ot
             int windowY;
             int windowWidht;
             int windowHeight;
+            tracker_info_t previousFrameInfo;
+            cv::Mat currentFrame;
 
             int r, g, b;  /**< Interest colour */
 
@@ -34,6 +36,7 @@ namespace ot
             void initialize();
 
             void searchObject();
+            void calcCenterOfMean();
     };
 }
 
