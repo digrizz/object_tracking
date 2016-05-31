@@ -11,7 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
     initialize();
-    ot::Logger::getInstance()->warning("test");
 
     ot::Tracker t;          // it's here for test only
 }
