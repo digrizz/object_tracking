@@ -154,6 +154,7 @@ namespace ot
                     else
                     {
                         regionPixelCount.push_back(1);
+                        ballRegions.at<uchar>(i,j) = regionPixelCount.size();
                     }
                 }
             }
