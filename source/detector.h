@@ -33,7 +33,7 @@ namespace ot
                 canPerformDetect = value;
             }
 
-            void initialize(int ballR, int ballG, int ballB, 
+            void initialize(int wWidth, int wHeight, int ballR, int ballG, int ballB, 
                         int boardR, int boardG, int boardB, int tolerance);
 
         private:
@@ -58,9 +58,11 @@ namespace ot
             int ballY;
             bool ballFound;
 
-            void findBall(cv::Mat ballThreshold);
+            int windowWidth;
+            int windowHeight;
+
+            bool findBall(cv::Mat ballThreshold);
     };
 }
 
-#endif DETECTOR_H__
-
+#endif

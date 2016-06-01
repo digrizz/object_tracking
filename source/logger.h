@@ -1,3 +1,6 @@
+#ifndef LOGGER_H__
+#define LOGGER_H__
+
 #include <string>
 
 namespace ot
@@ -26,3 +29,4 @@ namespace ot
     };
 }
 
+#endif

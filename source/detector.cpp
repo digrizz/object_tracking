@@ -23,6 +23,9 @@ namespace ot
     {
         detector_info_t retval;
 
+        ballX = 0;
+        ballY = 0;
+
         cv::Mat boardThreshold;
 
 
@@ -53,22 +56,22 @@ namespace ot
 
         ball = ball & board;
 
-        findBall(ball);
+        retval.isDetected = findBall(ball);
 
-        cv::imshow("ball", ball);
-        cv::waitKey(0);
+        //cv::imshow("ball", ball);
+        //cv::waitKey(0);
 
         retval.x = ballX;
         retval.y = ballY;
-        retval.width = 100;
-        retval.height = 100;
-        retval.isDetected = true;
+        retval.width = windowWidth;
+        retval.height = windowHeight;
+        //retval.isDetected = true;
 
         return retval;
     }
 
 
-    void Detector::initialize(int ballR, int ballG, int ballB, 
+    void Detector::initialize(int wWidth, int wHeight, int ballR, int ballG, int ballB, 
             int boardR, int boardG, int boardB, int tolerance)
     {
         ballRMin = ballR - tolerance;
@@ -100,53 +103,65 @@ namespace ot
         if (boardBMax > 255) boardBMax = 255;
 
         this->tolerance = tolerance;
+
+        windowWidth = wWidth;
+        windowHeight = wHeight;
     }
 
-    void Detector::findBall(cv::Mat ballThreshold)
+    bool Detector::findBall(cv::Mat ballThreshold)
     {
-        std::cout << "0\n";
-
         std::cout << "rows: " << ballThreshold.rows << " ; cols: " << ballThreshold.cols << "\n";
 
         std::vector<int> regionPixelCount;
-        cv::Mat ballRegions(ballThreshold.cols, ballThreshold.rows, CV_8UC1, 0);
+        cv::Mat ballRegions(ballThreshold.cols, ballThreshold.rows, CV_8UC1, cv::Scalar(0));
 
-        std::cout << "0.1\n";
-        cv::waitKey(0);
+        cv::imshow("ballThreshold", ballThreshold);
+        //cv::waitKey(0);
 
         ballX = 0;
         ballY = 0;
 
-        std::cout << "0.2\n";
         for(int i=1; i<ballThreshold.rows-1; i++)
         {
             for(int j=1; j<ballThreshold.cols-1; j++) 
             {
                 if (ballThreshold.at<uchar>(i,j) > 128)
                 {
-                    int neighbour = ballThreshold.at<uchar>(i-1,j-1);
+                    int neighbour = ballRegions.at<uchar>(i-1,j-1);
                     if (neighbour > 0)
+                    {
                         regionPixelCount[neighbour]++;
-                    neighbour = ballThreshold.at<uchar>(i-1,j);
+                        ballRegions.at<uchar>(i,j) = neighbour;
+                    }
+                    neighbour = ballRegions.at<uchar>(i-1,j);
                     if (neighbour > 0)
+                    {
                         regionPixelCount[neighbour]++;
-                    neighbour = ballThreshold.at<uchar>(i-1,j+1);
+                        ballRegions.at<uchar>(i,j) = neighbour;
+                    }
+                    neighbour = ballRegions.at<uchar>(i-1,j+1);
                     if (neighbour > 0)
+                    {
                         regionPixelCount[neighbour]++;
-                    neighbour = ballThreshold.at<uchar>(i,j-1);
+                        ballRegions.at<uchar>(i,j) = neighbour;
+                    }
+                    neighbour = ballRegions.at<uchar>(i,j-1);
                     if (neighbour > 0)
+                    {
                         regionPixelCount[neighbour]++;
+                        ballRegions.at<uchar>(i,j) = neighbour;
+                    }
                     else
-                        regionPixelCount.push_back(0);
+                    {
+                        regionPixelCount.push_back(1);
+                    }
                 }
             }
         }
 
-        std::cout << 1 << "\n";
-
         if (regionPixelCount.size() == 0)
         {
-            return;
+            return false;
         }
 
         int maxRegion = -1;
@@ -160,17 +175,15 @@ namespace ot
             }
         }
 
-        std::cout << 2 << "\n";
-
         long long x = 0;
         long long y = 0;
         int count = 0;
 
-        for(int i=1; i<ballThreshold.rows-1; i++)
+        for(int i=1; i<ballRegions.rows-1; i++)
         {
-            for(int j=1; j<ballThreshold.cols-1; j++) 
+            for(int j=1; j<ballRegions.cols-1; j++) 
             {
-                if (ballThreshold.at<uchar>(i,j) > 128)
+                if (ballRegions.at<uchar>(i,j) == maxRegion)
                 {
                     x += j;
                     y += i;
@@ -179,10 +192,18 @@ namespace ot
             }
         }
 
-        std::cout << 3 << "\n";
+        ballX = x / count - windowWidth / 2;
+        ballY = y / count - windowHeight / 2;
 
-        ballX = x / ballThreshold.cols;
-        ballY = y / ballThreshold.rows;
+        std::cout << "ballX: " << ballX << " ; ballY: " << ballY << "\n";
+
+        if (ballX < 0) ballX = 0;
+        if (ballY < 0) ballY = 0;
+
+        if (ballX > ballThreshold.cols - windowWidth) ballX = ballThreshold.cols - windowWidth;
+        if (ballY > ballThreshold.rows - windowHeight) ballY = ballThreshold.rows - windowHeight;
+
+        return true;
     }
 }
 

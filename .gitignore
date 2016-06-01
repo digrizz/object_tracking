@@ -42,3 +42,4 @@ __pycache__
 CMakeLists.txt.user
 source/object_tracking.pro
 source/object_tracking.pro.user
+*.pyc

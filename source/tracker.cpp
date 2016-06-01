@@ -73,7 +73,7 @@ namespace ot
 
         notMoveTolerance = 4;
 
-        detector.initialize(r, g, b, 0, 160, 0, 60);
+        detector.initialize(windowWidth, windowHeight, r, g, b, 0, 160, 0, 60);
 
         // std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now(); 
         //
@@ -106,8 +106,10 @@ namespace ot
 
     bool Tracker::calcCenterOfMean()
     {
+        std::cout << "windowX: " << windowX << " ; windowY: " << windowY << "\n";
         cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
-        //cv::imshow("window", window);
+        cv::imshow("window", window);
+        cv::waitKey(0);
 
         cv::Mat threshold;
         cv::inRange(window, 
@@ -121,6 +123,7 @@ namespace ot
         long long x = 0;
         long long y = 0;
         int count = 0;
+
 
         for(int i=0; i<threshold.rows; i++)
         {
@@ -156,17 +159,20 @@ namespace ot
             return false;
         }
 
+
         windowX += x / count - windowWidth / 2;
         windowY += y / count - windowHeight / 2;
 
         if (windowX < 0) windowX = 0;
         if (windowY < 0) windowY = 0;
 
-        if (windowX > 255) windowX = 255;
-        if (windowY > 255) windowY = 255;
+        if (windowX > currentFrame.cols) windowX = currentFrame.cols;
+        if (windowY > currentFrame.rows) windowY = currentFrame.rows;
 
         std::cout << "previousX: " << previousX << " ; previousY: " << previousY << "\n";
         std::cout << "windowX: " << windowX << " ; windowY: " << windowY << "\n";
+
+        return true;
     }
 }
 
