@@ -248,7 +248,7 @@ void MainWindow::updateGUI()
     if(frameProcessed.empty())
         return;
 
-    _capture.read(frameProcessed);
+   // _capture.read(frameProcessed);
 
     ot::tracker_info_t info = tracker.trackObject(frame);
     ot::tracker_info_t ts = tracker.trackObject(frameProcessed);
