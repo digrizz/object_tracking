@@ -34,16 +34,7 @@ namespace ot
             }
 
             void initialize(int wWidth, int wHeight, int ballR, int ballG, int ballB, 
-                        int boardR, int boardG, int boardB, int tolerance);
-
-        private:
-            bool canPerformDetect;
-            int ballRMin;
-            int ballGMin;
-            int ballBMin;
-            int ballRMax;
-            int ballGMax;
-            int ballBMax;
+                    int ballTolerance, int boardR, int boardG, int boardB, int tolerance);
 
             int boardRMin;
             int boardGMin;
@@ -51,6 +42,17 @@ namespace ot
             int boardRMax;
             int boardGMax;
             int boardBMax;
+
+            int ballRMin;
+            int ballGMin;
+            int ballBMin;
+            int ballRMax;
+            int ballGMax;
+            int ballBMax;
+
+
+        private:
+            bool canPerformDetect;
 
             int tolerance;
 

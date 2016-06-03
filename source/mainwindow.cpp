@@ -3,6 +3,7 @@
 #include "logger.h"
 
 #include "tracker.h"
+#include "windows.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,11 +48,15 @@ void MainWindow::initialize()
             this, SLOT(updateGUI()));
 
     _timer->start(20);
+
+
 }
 
 QString MainWindow::openFile()
 {
     auto fileName = QFileDialog::getOpenFileName(this,tr("Open Video File"), "'C:\'", tr("Video Files (*.mp4 *.mkv)"));
+    auto fileNameWithoutPath = QFileInfo(fileName).fileName();
+    ui->teConsole->append("Opened File: "+fileNameWithoutPath);
     return fileName;
 }
 
@@ -64,7 +69,7 @@ void MainWindow::setVideoCapture()
         _capture = cv::VideoCapture(path);
 
         if(!_capture.isOpened())
-            qDebug() << "error: capture not accessed successfuly";
+            ui->teConsole->append("error: capture not accessed successfuly");
     }
 }
 
@@ -245,6 +250,10 @@ void MainWindow::updateGUI()
     QImage output((const unsigned char*) _frameOriginal.data, _frameOriginal.cols, _frameOriginal.rows, _frameOriginal.step, QImage::Format_RGB888);
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
+    //cv::waitKey(30);
+    Sleep(50);
+    ot::tracker_info_t coords;
+    ui->teConsole->append(QString("X = %1 Y = %2").arg(coords.ballX).arg(coords.ballY));
 
 }
 
@@ -254,11 +263,13 @@ void MainWindow::on_btnPause_clicked()
     {
         _timer->stop();
         ui->btnPause->setText("Resume");
+        ui->teConsole->append("Resume");
     }
     else
     {
         _timer->start(20);
         ui->btnPause->setText("Pause");
+        ui->teConsole->append("Pause");
     }
 }
 
