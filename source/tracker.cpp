@@ -20,7 +20,14 @@ namespace ot
 
     Tracker::~Tracker()
     {
-        
+
+    }
+
+
+    cv::Mat Tracker::markBall(cv::Mat &frame, int x, int y, int r)
+    {
+        cv::circle( frame, cv::Point( x, y ), r, cv::Scalar( 0, 0, 255 ), 1, 8 );
+        return frame;
     }
 
 
@@ -32,8 +39,17 @@ namespace ot
 
         tracker_info_t retval;
         retval.x = ballX;
-        retval.y = ballX;
-        retval.frame = frame;
+        retval.y = ballY;
+        //retval.frame = frame;
+        if (ballX > 0 && ballY > 0)
+        {
+            retval.frame = markBall(frame, ballX, ballY, 30);
+        }
+        else
+        {
+            retval.frame = frame;
+        }
+        //retval.frame = markBall(frame, 100, 100, 40);
 
         previousFrameInfo = retval;
         return retval;
@@ -78,7 +94,7 @@ namespace ot
     {
         previousX = windowX;
         previousY = windowY;
-        
+
         detector.setCanDetect(true);
         const int MAX_ITERATIONS = 10;
         bool continueShift = false;
@@ -106,8 +122,13 @@ namespace ot
             windowY = detectInfo.y;
 
             detector.setCanDetect(false);
+
+            ballX = windowX + windowWidth / 2;
+            ballY = windowY + windowHeight / 2;
             return true;
         }
+        ballX = -1;
+        ballY = -1;
         return false;
     }
 
@@ -116,20 +137,20 @@ namespace ot
         cv::Mat boardThreshold;
 
         cv::inRange(window, 
-                    cv::Scalar(detector.boardRMin, detector.boardGMin, detector.boardBMin), 
-                    cv::Scalar(detector.boardRMax, detector.boardGMax, detector.boardBMax), 
-                    boardThreshold);
+                cv::Scalar(detector.boardRMin, detector.boardGMin, detector.boardBMin), 
+                cv::Scalar(detector.boardRMax, detector.boardGMax, detector.boardBMax), 
+                boardThreshold);
 
         cv::Mat board;
 
         cv::Mat ball;
         cv::inRange(window, 
-                    cv::Scalar(detector.ballRMin, detector.ballGMin, detector.ballBMin), 
-                    cv::Scalar(detector.ballRMax, detector.ballGMax, detector.ballBMax), 
-                    ball);
+                cv::Scalar(detector.ballRMin, detector.ballGMin, detector.ballBMin), 
+                cv::Scalar(detector.ballRMax, detector.ballGMax, detector.ballBMax), 
+                ball);
 
         cv::Mat const structure_elem_ball = cv::getStructuringElement(
-                 cv::MORPH_RECT, cv::Size(10, 10));
+                cv::MORPH_RECT, cv::Size(10, 10));
         cv::morphologyEx(boardThreshold, board, cv::MORPH_DILATE, structure_elem_ball);
 
         ball = ball & board;
@@ -149,6 +170,7 @@ namespace ot
         }
 
         cv::Mat ball = getBall(window);
+        frameThreshold = getBall(currentFrame);
 
         cv::imshow("ball", ball);
         //cv::waitKey(0);
@@ -232,7 +254,8 @@ namespace ot
         {
             if (detector.getCanDetect())
             {
-                return detect(currentFrame);
+                bool retval = detect(currentFrame);
+                return retval;
             }
             return false;
         }
@@ -247,6 +270,8 @@ namespace ot
         if (windowX > currentFrame.cols-windowWidth) windowX = currentFrame.cols-windowWidth;
         if (windowY > currentFrame.rows-windowHeight) windowY = currentFrame.rows-windowHeight;
 
+        ballX = windowX + windowWidth / 2;
+        ballY = windowY + windowHeight / 2;
         return true;
     }
 }

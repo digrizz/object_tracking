@@ -54,14 +54,15 @@ namespace ot
 
             double density; /**< Indicates what is density of interest pixels in window */
 
+            int trackCount;
+
             Detector detector;
 
             void initialize();
-
             void searchObject();
             bool calcCenterOfMean();
+            cv::Mat markBall(cv::Mat &frame, int x, int y, int r);
 
-            int trackCount;
     };
 }
 
