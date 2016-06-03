@@ -161,8 +161,8 @@ namespace ot
     bool Tracker::calcCenterOfMean()
     {
         frameThreshold = getBall(currentFrame);
-        cv::imshow("ball", frameThreshold);
-        cv::waitKey(0);
+        //cv::imshow("ball", frameThreshold);
+        //cv::waitKey(0);
 
         cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
         //cv::imshow("window", window);
