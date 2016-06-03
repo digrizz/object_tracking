@@ -4,7 +4,9 @@
 #include <iostream>
 
 #include "tracker.h"
+#ifdef _WIN32
 #include "windows.h"
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -253,9 +255,13 @@ void MainWindow::updateGUI()
     ot::tracker_info_t info = tracker.trackObject(frame);
 
     QSize originalSize = ui->lblImgOrginal->size();
-    int windowWidth = originalSize.width();
-    int windowHeight = originalSize.height();
-    cv::resize(info.frame, info.frame, cv::Size(windowWidth, windowHeight));
+//    int windowWidth = originalSize.width();
+//    int windowHeight = originalSize.height();
+
+    QSize processedSize = ui->lblImgProcessed->size();
+
+    cv::resize(info.frame, info.frame, cv::Size(originalSize.width(), originalSize.height()));
+    cv::resize(info.frameThreshold, info.frameThreshold, cv::Size(processedSize.width(), processedSize.height()));
 
     cv::cvtColor(info.frame, info.frame, CV_BGR2RGB);
 
@@ -263,12 +269,13 @@ void MainWindow::updateGUI()
     QImage outputProcessed((const unsigned char*) info.frameThreshold.data, info.frameThreshold.cols, info.frameThreshold.rows, info.frameThreshold.step, QImage::Format_Indexed8);
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
+    ui->lblImgOrginal->resize(ui->lblImgOrginal->pixmap()->size());
     ui->lblImgProcessed->setPixmap(QPixmap::fromImage(outputProcessed));
 
-    //cv::waitKey(30);
-    Sleep(90);
-
-    ui->teConsole->append(QString("X = %1 Y = %2").arg(info.x).arg(info.y));
+    #ifdef _WIN32
+        Sleep(90);
+    #endif
+    ui->teConsole->append(QString("X = %1   Y = %2").arg(info.x).arg(info.y));
 
 }
 
