@@ -235,31 +235,34 @@ void MainWindow::verifyCbxIsChecked()
 
 void MainWindow::updateGUI()
 {
-    ot::tracker_info_t _frameOriginal;
-    ot::tracker_info_t frameProcessed;
-    (_capture) >> _frameOriginal.frame;
-    (_capture) >> frameProcessed.frameThreshold;
+    cv::Mat frame;
+    cv::Mat frameProcessed;
+    (_capture) >> frame;
+    (_capture) >> frameProcessed;
 
-    if(_frameOriginal.frame.empty())
+    if(frame.empty())
         return;
 
-    _capture.read(_frameOriginal.frame);
-    _capture.read(frameProcessed.frameThreshold);
+    _capture.read(frame);
 
-    ot::tracker_info_t info = tracker.trackObject(_frameOriginal.frame);
+    if(frameProcessed.empty())
+        return;
 
-    cv::cvtColor(_frameOriginal.frame, _frameOriginal.frame, CV_BGR2RGB);
-    cv::cvtColor(frameProcessed.frameThreshold, frameProcessed.frameThreshold, CV_BGR2RGB);
+    _capture.read(frameProcessed);
 
-    QImage output((const unsigned char*) _frameOriginal.frame.data, _frameOriginal.frame.cols, _frameOriginal.frame.rows, _frameOriginal.frame.step, QImage::Format_RGB888);
-    QImage outputProcessed((const unsigned char*) frameProcessed.frameThreshold.data, frameProcessed.frameThreshold.cols, frameProcessed.frameThreshold.rows, frameProcessed.frameThreshold.step, QImage::Format_Indexed8);
-   // QImage outputProcessed((const unsigned char*) _frameOriginal.frameThreshold.data, _frameOriginal.frameThreshold.cols, _frameOriginal.frameThreshold.rows, _frameOriginal.frameThreshold.step, QImage::Format_Indexed8);
+    ot::tracker_info_t info = tracker.trackObject(frame);
+    ot::tracker_info_t ts = tracker.trackObject(frameProcessed);
+
+    cv::cvtColor(info.frame, info.frame, CV_BGR2RGB);
+    cv::cvtColor(ts.frameThreshold, ts.frameThreshold, CV_BGR2RGB);
+
+    QImage output((const unsigned char*) info.frame.data, info.frame.cols, info.frame.rows, info.frame.step, QImage::Format_RGB888);
+    QImage outputProcessed((const unsigned char*) ts.frameThreshold.data, ts.frameThreshold.cols, ts.frameThreshold.rows, ts.frameThreshold.step, QImage::Format_Indexed8);
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
     ui->lblImgProcessed->setPixmap(QPixmap::fromImage(outputProcessed));
     //cv::waitKey(30);
-//    ot::tracker_info_t coords = _frameOriginal.x;
-//    ui->teConsole->append(QString("X = %1 Y = %2").arg(coords).arg(coords));
+    ui->teConsole->append(QString("X = %1 Y = %2").arg(info.x).arg(info.y));
 
 }
 
