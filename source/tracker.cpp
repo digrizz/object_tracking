@@ -33,6 +33,7 @@ namespace ot
         tracker_info_t retval;
         retval.x = ballX;
         retval.y = ballX;
+        retval.frame = frame;
 
         previousFrameInfo = retval;
         return retval;
@@ -149,7 +150,6 @@ namespace ot
 
         cv::Mat ball = getBall(window);
 
-        cv::imshow("board", board);
         cv::imshow("ball", ball);
         //cv::waitKey(0);
 
