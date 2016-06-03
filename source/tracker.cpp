@@ -50,10 +50,8 @@ namespace ot
             retval.frame = frame;
         }
         retval.frameThreshold = frameThreshold;
-        //cv::imshow("threshold", frameThreshold);
-        //retval.frame = markBall(frame, 100, 100, 40);
+        cv::imshow("frame", frame);
 
-        previousFrameInfo = retval;
         return retval;
     }
 
@@ -64,11 +62,11 @@ namespace ot
         windowY = 10;
         windowWidth = 100;
         windowHeight = 100;
-        r = 215;
-        g = 215;
-        b = 215;
+        r = 205;
+        g = 205;
+        b = 205;
 
-        threshTol = 40;
+        threshTol = 50;
 
         rMin = r-threshTol;
         gMin = g-threshTol;
@@ -98,7 +96,7 @@ namespace ot
         previousY = windowY;
 
         detector.setCanDetect(true);
-        const int MAX_ITERATIONS = 10;
+        const int MAX_ITERATIONS = 4;
         bool continueShift = false;
         int i=0;
         do
