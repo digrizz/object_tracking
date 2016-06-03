@@ -237,7 +237,7 @@ void MainWindow::verifyCbxIsChecked()
 void MainWindow::updateGUI()
 {
     ot::tracker_info_t _frameOriginal;
-    //(*_capture) >> _frameOriginal;
+    (_capture) >> _frameOriginal.frame;
 
     if(_frameOriginal.frame.empty())
         return;
