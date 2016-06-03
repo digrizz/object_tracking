@@ -235,23 +235,24 @@ void MainWindow::verifyCbxIsChecked()
 
 void MainWindow::updateGUI()
 {
-    (_capture) >> _frameOriginal;
+    ot::tracker_info_t _frameOriginal;
+    //(*_capture) >> _frameOriginal;
 
-    if(_frameOriginal.empty())
+    if(_frameOriginal.frame.empty())
         return;
 
-    _capture.read(_frameOriginal);
+    _capture.read(_frameOriginal.frame);
 
-    ot::tracker_info_t info = tracker.trackObject(_frameOriginal);
+    ot::tracker_info_t info = tracker.trackObject(_frameOriginal.frame);
 
-    cv::cvtColor(_frameOriginal, _frameOriginal, CV_BGR2RGB);
+    cv::cvtColor(_frameOriginal.frame, _frameOriginal.frame, CV_BGR2RGB);
 
-    QImage output((const unsigned char*) _frameOriginal.data, _frameOriginal.cols, _frameOriginal.rows, _frameOriginal.step, QImage::Format_RGB888);
+    QImage output((const unsigned char*) _frameOriginal.frame.data, _frameOriginal.frame.cols, _frameOriginal.frame.rows, _frameOriginal.frame.step, QImage::Format_RGB888);
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
     //cv::waitKey(30);
     ot::tracker_info_t coords;
-    ui->teConsole->append(QString("X = %1 Y = %2").arg(coords.ballX).arg(coords.ballY));
+    ui->teConsole->append(QString("X = %1 Y = %2").arg(coords.x).arg(coords.y));
 
 }
 
