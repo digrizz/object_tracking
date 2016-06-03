@@ -49,6 +49,7 @@ namespace ot
         {
             retval.frame = frame;
         }
+        retval.frameThreshold = frameThreshold;
         //retval.frame = markBall(frame, 100, 100, 40);
 
         previousFrameInfo = retval;
@@ -160,7 +161,7 @@ namespace ot
     bool Tracker::calcCenterOfMean()
     {
         cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
-        cv::imshow("window", window);
+        //cv::imshow("window", window);
 
         trackCount++;
 
@@ -172,7 +173,7 @@ namespace ot
         cv::Mat ball = getBall(window);
         frameThreshold = getBall(currentFrame);
 
-        cv::imshow("ball", ball);
+        //cv::imshow("ball", ball);
         //cv::waitKey(0);
 
         std::vector<int> regionPixelCount;

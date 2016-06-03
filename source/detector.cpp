@@ -56,7 +56,7 @@ namespace ot
 
         ball = ball & board;
 
-        cv::imshow("detectball", ball);
+        //cv::imshow("detectball", ball);
 
         retval.isDetected = findBall(ball);
 
