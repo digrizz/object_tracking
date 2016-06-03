@@ -13,6 +13,8 @@ namespace ot
         int y;
         int width;
         int height;
+        int ballX;
+        int ballY;
         cv::Mat frame;
     };
 
@@ -24,6 +26,8 @@ namespace ot
             virtual ~Tracker();
 
             tracker_info_t trackObject(cv::Mat &frame);
+
+            bool detect(cv::Mat currentFrame);
 
         private:
             int windowX;
@@ -52,6 +56,8 @@ namespace ot
 
             void searchObject();
             bool calcCenterOfMean();
+
+            int trackCount;
     };
 }
 

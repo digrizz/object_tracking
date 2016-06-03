@@ -56,6 +56,8 @@ namespace ot
 
         ball = ball & board;
 
+        cv::imshow("detectball", ball);
+
         retval.isDetected = findBall(ball);
 
         //cv::imshow("ball", ball);
@@ -71,19 +73,19 @@ namespace ot
     }
 
 
-    void Detector::initialize(int wWidth, int wHeight, int ballR, int ballG, int ballB, 
-            int boardR, int boardG, int boardB, int tolerance)
+    void Detector::initialize(int wWidth, int wHeight, int ballR, int ballG, int ballB,
+            int ballTolerance, int boardR, int boardG, int boardB, int tolerance)
     {
-        ballRMin = ballR - tolerance;
-        ballGMin = ballG - tolerance;
-        ballBMin = ballB - tolerance;
+        ballRMin = ballR - ballTolerance;
+        ballGMin = ballG - ballTolerance;
+        ballBMin = ballB - ballTolerance;
         if (ballRMin < 0) ballRMin = 0;
         if (ballGMin < 0) ballGMin = 0;
         if (ballBMin < 0) ballBMin = 0;
 
-        ballRMax = ballR + tolerance;
-        ballGMax = ballG + tolerance;
-        ballBMax = ballB + tolerance;
+        ballRMax = ballR + ballTolerance;
+        ballGMax = ballG + ballTolerance;
+        ballBMax = ballB + ballTolerance;
         if (ballRMax > 255) ballRMax = 255;
         if (ballGMax > 255) ballGMax = 255;
         if (ballBMax > 255) ballBMax = 255;
@@ -110,12 +112,10 @@ namespace ot
 
     bool Detector::findBall(cv::Mat ballThreshold)
     {
-        std::cout << "rows: " << ballThreshold.rows << " ; cols: " << ballThreshold.cols << "\n";
-
         std::vector<int> regionPixelCount;
-        cv::Mat ballRegions(ballThreshold.cols, ballThreshold.rows, CV_8UC1, cv::Scalar(0));
+        cv::Mat ballRegions(ballThreshold.rows, ballThreshold.cols, CV_8UC1, cv::Scalar(0));
 
-        cv::imshow("ballThreshold", ballThreshold);
+        //cv::imshow("ballThreshold", ballThreshold);
         //cv::waitKey(0);
 
         ballX = 0;
@@ -196,7 +196,6 @@ namespace ot
         ballX = x / count - windowWidth / 2;
         ballY = y / count - windowHeight / 2;
 
-        std::cout << "ballX: " << ballX << " ; ballY: " << ballY << "\n";
 
         if (ballX < 0) ballX = 0;
         if (ballY < 0) ballY = 0;
