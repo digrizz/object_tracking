@@ -109,7 +109,7 @@ namespace ot
         std::cout << "windowX: " << windowX << " ; windowY: " << windowY << "\n";
         cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
         cv::imshow("window", window);
-        cv::waitKey(0);
+        //cv::waitKey(0);
 
         cv::Mat threshold;
         cv::inRange(window, 
