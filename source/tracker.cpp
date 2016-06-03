@@ -49,8 +49,8 @@ namespace ot
         {
             retval.frame = frame;
         }
-        cv::imshow("frame", retval.frame);
-        cv::waitKey(0);
+        //cv::imshow("frame", retval.frame);
+        //cv::waitKey(0);
         retval.frameThreshold = frameThreshold;
 
         return retval;
