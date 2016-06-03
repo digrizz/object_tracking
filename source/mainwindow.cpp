@@ -236,23 +236,30 @@ void MainWindow::verifyCbxIsChecked()
 void MainWindow::updateGUI()
 {
     ot::tracker_info_t _frameOriginal;
+    ot::tracker_info_t frameProcessed;
     (_capture) >> _frameOriginal.frame;
+    (_capture) >> frameProcessed.frameThreshold;
 
     if(_frameOriginal.frame.empty())
         return;
 
     _capture.read(_frameOriginal.frame);
+    _capture.read(frameProcessed.frameThreshold);
 
     ot::tracker_info_t info = tracker.trackObject(_frameOriginal.frame);
 
     cv::cvtColor(_frameOriginal.frame, _frameOriginal.frame, CV_BGR2RGB);
+    cv::cvtColor(frameProcessed.frameThreshold, frameProcessed.frameThreshold, CV_BGR2RGB);
 
     QImage output((const unsigned char*) _frameOriginal.frame.data, _frameOriginal.frame.cols, _frameOriginal.frame.rows, _frameOriginal.frame.step, QImage::Format_RGB888);
+    QImage outputProcessed((const unsigned char*) frameProcessed.frameThreshold.data, frameProcessed.frameThreshold.cols, frameProcessed.frameThreshold.rows, frameProcessed.frameThreshold.step, QImage::Format_Indexed8);
+   // QImage outputProcessed((const unsigned char*) _frameOriginal.frameThreshold.data, _frameOriginal.frameThreshold.cols, _frameOriginal.frameThreshold.rows, _frameOriginal.frameThreshold.step, QImage::Format_Indexed8);
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
+    ui->lblImgProcessed->setPixmap(QPixmap::fromImage(outputProcessed));
     //cv::waitKey(30);
-    ot::tracker_info_t coords;
-    ui->teConsole->append(QString("X = %1 Y = %2").arg(coords.x).arg(coords.y));
+//    ot::tracker_info_t coords = _frameOriginal.x;
+//    ui->teConsole->append(QString("X = %1 Y = %2").arg(coords).arg(coords));
 
 }
 
