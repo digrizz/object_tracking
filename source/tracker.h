@@ -26,7 +26,7 @@ namespace ot
 
             bool detect(cv::Mat currentFrame);
 
-            cv::Mat getBall(cv::Mat frame)
+            cv::Mat getBall(cv::Mat frame);
 
         private:
             int windowX;

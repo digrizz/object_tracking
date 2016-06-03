@@ -151,7 +151,7 @@ namespace ot
 
         cv::imshow("board", board);
         cv::imshow("ball", ball);
-        cv::waitKey(0);
+        //cv::waitKey(0);
 
         std::vector<int> regionPixelCount;
         cv::Mat ballRegions(ball.rows, ball.cols, CV_8UC1, cv::Scalar(0));
