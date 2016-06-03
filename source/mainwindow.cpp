@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "logger.h"
+#include <iostream>
 
 #include "tracker.h"
 
@@ -245,6 +246,11 @@ void MainWindow::updateGUI()
 
     ot::tracker_info_t info = tracker.trackObject(frame);
 
+    QSize originalSize = ui->lblImgOrginal->size();
+    int windowWidth = originalSize.width();
+    int windowHeight = originalSize.height();
+    cv::resize(info.frame, info.frame, cv::Size(windowWidth, windowHeight));
+
     cv::cvtColor(info.frame, info.frame, CV_BGR2RGB);
 
     QImage output((const unsigned char*) info.frame.data, info.frame.cols, info.frame.rows, info.frame.step, QImage::Format_RGB888);
@@ -252,6 +258,7 @@ void MainWindow::updateGUI()
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
     ui->lblImgProcessed->setPixmap(QPixmap::fromImage(outputProcessed));
+
     //cv::waitKey(30);
     ui->teConsole->append(QString("X = %1 Y = %2").arg(info.x).arg(info.y));
 

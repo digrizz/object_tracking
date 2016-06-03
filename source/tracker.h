@@ -28,6 +28,26 @@ namespace ot
 
             cv::Mat getBall(cv::Mat frame);
 
+            inline void setBallR(int value)
+            {
+                r = value;
+            }
+
+            inline void setBallG(int value)
+            {
+                g = value;
+            }
+
+            inline void setBallB(int value)
+            {
+                b = value;
+            }
+
+            inline void setThresholdTolerance(int value)
+            {
+                threshTol = value;
+            }
+
         private:
             int windowX;
             int windowY;

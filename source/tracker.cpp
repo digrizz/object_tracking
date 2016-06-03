@@ -152,7 +152,7 @@ namespace ot
 
         cv::Mat const structure_elem_ball = cv::getStructuringElement(
                 cv::MORPH_RECT, cv::Size(15, 15));
-        cv::morphologyEx(boardThreshold, board, cv::MORPH_OPEN, structure_elem_ball);
+        cv::morphologyEx(boardThreshold, board, cv::MORPH_DILATE, structure_elem_ball);
 
         ball = ball & board;
         return ball;
@@ -160,6 +160,10 @@ namespace ot
 
     bool Tracker::calcCenterOfMean()
     {
+        frameThreshold = getBall(currentFrame);
+        cv::imshow("ball", frameThreshold);
+        cv::waitKey(0);
+
         cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
         //cv::imshow("window", window);
 
@@ -171,10 +175,6 @@ namespace ot
         }
 
         cv::Mat ball = getBall(window);
-        frameThreshold = getBall(currentFrame);
-
-        //cv::imshow("ball", ball);
-        //cv::waitKey(0);
 
         std::vector<int> regionPixelCount;
         cv::Mat ballRegions(ball.rows, ball.cols, CV_8UC1, cv::Scalar(0));
