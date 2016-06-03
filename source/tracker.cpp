@@ -50,6 +50,7 @@ namespace ot
             retval.frame = frame;
         }
         retval.frameThreshold = frameThreshold;
+        //cv::imshow("threshold", frameThreshold);
         //retval.frame = markBall(frame, 100, 100, 40);
 
         previousFrameInfo = retval;
