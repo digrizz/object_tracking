@@ -11,11 +11,8 @@ namespace ot
     {
         int x;
         int y;
-        int width;
-        int height;
-        int ballX;
-        int ballY;
         cv::Mat frame;
+        cv::Mat frameThreshold;
     };
 
 
@@ -29,11 +26,18 @@ namespace ot
 
             bool detect(cv::Mat currentFrame);
 
+            cv::Mat getBall(cv::Mat frame)
+
         private:
             int windowX;
             int windowY;
             int windowWidth;
             int windowHeight;
+
+            int ballX;
+            int ballY;
+
+            cv::Mat frameThreshold;
 
             int previousX;
             int previousY;

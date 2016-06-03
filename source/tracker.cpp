@@ -31,14 +31,8 @@ namespace ot
         searchObject();
 
         tracker_info_t retval;
-        retval.x = windowX;
-        retval.y = windowY;
-        retval.width = windowWidth;
-        retval.height = windowHeight;
-        retval.frame = currentFrame;
-
-        retval.ballX = windowX + windowWidth / 2;
-        retval.ballY = windowY + windowHeight / 2;
+        retval.x = ballX;
+        retval.y = ballX;
 
         previousFrameInfo = retval;
         return retval;
@@ -51,11 +45,11 @@ namespace ot
         windowY = 10;
         windowWidth = 100;
         windowHeight = 100;
-        r = 205;
-        g = 205;
-        b = 205;
+        r = 215;
+        g = 215;
+        b = 215;
 
-        threshTol = 50;
+        threshTol = 40;
 
         rMin = r-threshTol;
         gMin = g-threshTol;
@@ -116,18 +110,8 @@ namespace ot
         return false;
     }
 
-    bool Tracker::calcCenterOfMean()
+    cv::Mat Tracker::getBall(cv::Mat window)
     {
-        cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
-        cv::imshow("window", window);
-
-        trackCount++;
-
-        if (trackCount > 10)
-        {
-            return detect(currentFrame);
-        }
-
         cv::Mat boardThreshold;
 
         cv::inRange(window, 
@@ -148,6 +132,22 @@ namespace ot
         cv::morphologyEx(boardThreshold, board, cv::MORPH_DILATE, structure_elem_ball);
 
         ball = ball & board;
+        return ball;
+    }
+
+    bool Tracker::calcCenterOfMean()
+    {
+        cv::Mat window(currentFrame, cv::Rect(windowX, windowY, windowWidth, windowHeight));
+        cv::imshow("window", window);
+
+        trackCount++;
+
+        if (trackCount > 10)
+        {
+            return detect(currentFrame);
+        }
+
+        cv::Mat ball = getBall(window);
 
         cv::imshow("board", board);
         cv::imshow("ball", ball);
