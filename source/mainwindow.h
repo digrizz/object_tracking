@@ -53,7 +53,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     cv::VideoCapture _capture;
-    cv::Mat _frameOriginal;
+    //cv::Mat _frameOriginal;
     QImage _imgOrgianl;
     QTimer *_timer;
     QString _videoPath;
