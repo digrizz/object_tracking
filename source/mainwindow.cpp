@@ -3,7 +3,6 @@
 #include "logger.h"
 
 #include "tracker.h"
-#include "windows.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -252,7 +251,6 @@ void MainWindow::updateGUI()
 
     ui->lblImgOrginal->setPixmap(QPixmap::fromImage(output));
     //cv::waitKey(30);
-    Sleep(50);
     ot::tracker_info_t coords;
     ui->teConsole->append(QString("X = %1 Y = %2").arg(coords.x).arg(coords.y));
 
